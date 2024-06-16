@@ -18,6 +18,7 @@ class Level:
         self.bg_images = []
         for i in range(1, 6):
             self.bg_images.append(pg.image.load(path + f"\\background\\{i}.png").convert_alpha())
+        self.bullets = pg.sprite.Group()
 
     def draw_bg(self):
         bg_width = self.bg_images[0].get_width()
@@ -28,12 +29,20 @@ class Level:
                      self.scroll = 0
                 screen.blit(i, (x * bg_width - self.scroll * speed, 0))
                 speed += 0.3
+
+        self.bullets.draw(screen)
                    
 
     def draw_ground(self):
         pass
 
     def update(self):
+        self.bullets.update()
+
+        for b in self.bullets:
+            if b.rect.left > 10 * SCREEN_WIDTH:
+                b.kill()
+
         self.draw_bg()
         key = pg.key.get_pressed()
         if key[pg.K_LEFT]:
@@ -63,6 +72,9 @@ class Player(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = self.x, self.y
 
+        self.tick = pg.time.get_ticks()
+        
+
     def _load_images(self, action, num_frames):
         images = []
         for i in range(1, num_frames+1):
@@ -70,14 +82,27 @@ class Player(pg.sprite.Sprite):
             images.append(img)
         return images
 
+    def shoot(self, fire_rate):
+        current_tick = pg.time.get_ticks()
+        if current_tick - self.tick >= fire_rate:
+            self.tick = current_tick
+            b = Bullet(path + "\\bullet.png", player.x+70, player.y+30, 15)
+            l1.bullets.add(b)
+       
+       
+       # if last_bullet.x - b.x > 30:
+       
+        #if not pg.sprite.spritecollideany(b, l1.bullets):
+            
+
     def update(self):
         self.current_sprite += 0.3
         
         key = pg.key.get_pressed()
         if key[pg.K_SPACE]:
             self.state = 'shoot'
+            self.shoot(250)
         elif key[pg.K_UP] and not self.isJump:
-            
             self.state = 'jump'
         elif key[pg.K_RIGHT]:
             self.state = 'run'
@@ -91,9 +116,18 @@ class Player(pg.sprite.Sprite):
         
         self.image = self.animations[self.state][int(self.current_sprite)]
 
+class Bullet(pg.sprite.Sprite):
+    def __init__(self, image, x, y, vel_x):
+        super().__init__()
+        self.image = pg.image.load(image).convert_alpha()
+        self.x = x
+        self.y = y
+        self.vel_x = vel_x
+        self.rect = self.image.get_rect()
+        self.rect.center = self.x, self.y
 
-class Bullet:
-    pass
+    def update(self):
+        self.rect.centerx += self.vel_x
 
 class Enemy:
     pass
