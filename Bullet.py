@@ -13,6 +13,13 @@ class Bullet(pg.sprite.Sprite):
         self.rect.center = self.x, self.y
 
     def update(self):
-        self.rect.centerx += self.vel_x
+        key = pg.key.get_pressed()
+        if key[pg.K_RIGHT]:
+             self.rect.centerx += self.vel_x - 5
+        elif key[pg.K_LEFT]:
+            self.rect.centerx += self.vel_x + 5
+        else:
+            self.rect.centerx += self.vel_x
+        
         if self.rect.centerx > settings.SCREEN_WIDTH:
             self.kill()

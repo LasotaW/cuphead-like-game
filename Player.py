@@ -39,7 +39,7 @@ class Player(pg.sprite.Sprite):
         current_tick = pg.time.get_ticks()
         if current_tick - self.tick >= fire_rate:
             self.tick = current_tick
-            b = Bullet(settings.path + "\\bullet.png", self.rect.x+105, self.rect.y+105, 15)
+            b = Bullet(settings.path + "\\bullet.png", self.rect.x+105, self.rect.y+105, 20)
             settings.l1.bullets.add(b)
 
     def jump(self):
