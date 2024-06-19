@@ -26,7 +26,7 @@ class Player(pg.sprite.Sprite):
 
         self.tick = pg.time.get_ticks()
         self.vel_y = 0
-        self.gravity = 0.8
+        self.gravity = 0.9
 
     def _load_images(self, action, num_frames):
         images = []
@@ -36,16 +36,20 @@ class Player(pg.sprite.Sprite):
         return images
 
     def shoot(self, fire_rate):
+        shot_sound = pg.mixer.Sound(settings.music_path + "\\shot.ogg")
         current_tick = pg.time.get_ticks()
         if current_tick - self.tick >= fire_rate:
             self.tick = current_tick
             b = Bullet(settings.path + "\\bullet.png", self.rect.x+105, self.rect.y+105, 20)
             settings.l1.bullets.add(b)
+            shot_sound.play()
 
     def jump(self):
         if not self.isJump:
+            jump_sound = pg.mixer.Sound(settings.music_path + "\\jump.ogg")
+            jump_sound.play()
             self.isJump = True
-            self.vel_y = -15
+            self.vel_y = -20
 
     def apply_gravity(self):
         self.vel_y += self.gravity
@@ -55,8 +59,14 @@ class Player(pg.sprite.Sprite):
             self.rect.bottom = 576
             self.vel_y = 0
             self.isJump = False
-        
-    def update(self):
+    
+    def animate(self):
+        self.current_sprite += 0.3
+        if self.current_sprite >= len(self.animations[self.state]):
+            self.current_sprite = 0
+        self.image = self.animations[self.state][int(self.current_sprite)]
+
+    def move(self):
         key = pg.key.get_pressed()
         if key[pg.K_UP]:
             self.state = 'jump'
@@ -71,11 +81,9 @@ class Player(pg.sprite.Sprite):
         else:
             self.state = 'idle'
 
-        self.current_sprite += 0.3
-        if self.current_sprite >= len(self.animations[self.state]):
-            self.current_sprite = 0
-        self.image = self.animations[self.state][int(self.current_sprite)]
-        
+    def update(self):   
+        self.move()    
+        self.animate()        
         self.apply_gravity()
         
         
