@@ -16,10 +16,11 @@ class Level:
         self.bullets = pg.sprite.Group()
         self.obstacles = pg.sprite.Group()
 
-        for i in range(5):
+        for i in range(1, 10):
             rand_obstacle = random.randint(1,5)
             o = Obstacle(path + f"\\obstacle\\{rand_obstacle}.png",i * 1.5 *(random.randint(500,800)))
-            self.obstacles.add(o)
+            if not 2500 > o.rect.x > 4000:
+                self.obstacles.add(o)
 
     def draw_bg(self):
         bg_width = self.bg_images[0].get_width()
@@ -42,10 +43,10 @@ class Level:
         self.draw_bg()
         key = pg.key.get_pressed()
         if key[pg.K_LEFT]:
-            if self.scroll > 0:
+            if self.scroll > 0 and not pg.sprite.spritecollideany(settings.player, self.obstacles):
                 self.scroll -= 5
                 settings.enemy.rect.centerx += 12
-        if key[pg.K_RIGHT]:
+        if key[pg.K_RIGHT] and not pg.sprite.spritecollideany(settings.player, self.obstacles):
             self.scroll += 5
             settings.enemy.rect.centerx -= 12
 
@@ -72,5 +73,7 @@ class Level:
             if settings.player.health <= 0:
                 settings.player.isDead = True
 
-        
+        self.obstacles.draw(settings.screen)
+        if not pg.sprite.spritecollideany(settings.player, self.obstacles):
+            self.obstacles.update()
                 
