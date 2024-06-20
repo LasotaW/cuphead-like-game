@@ -1,8 +1,10 @@
 import pygame as pg
+import random
 
 import settings
 
 from EnemyBullet import EnemyBullet
+from Obstacle import Obstacle
 
 class Level:
     def __init__(self, path, surface):
@@ -12,6 +14,12 @@ class Level:
         for i in range(1, 6):
             self.bg_images.append(pg.image.load(path + f"\\background\\{i}.png").convert_alpha())
         self.bullets = pg.sprite.Group()
+        self.obstacles = pg.sprite.Group()
+
+        for i in range(5):
+            rand_obstacle = random.randint(1,5)
+            o = Obstacle(path + f"\\obstacle\\{rand_obstacle}.png",i * 1.5 *(random.randint(500,800)))
+            self.obstacles.add(o)
 
     def draw_bg(self):
         bg_width = self.bg_images[0].get_width()
@@ -26,6 +34,7 @@ class Level:
                 speed += 0.3
 
         self.bullets.draw(self.surface)
+        
 
     def update(self):
         self.bullets.update()
@@ -62,4 +71,6 @@ class Level:
             settings.player.health -= enemy_bullet_hit.damage
             if settings.player.health <= 0:
                 settings.player.isDead = True
+
+        
                 

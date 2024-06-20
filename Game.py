@@ -21,13 +21,15 @@ class Game:
             if self.state == "running":
                     #Render level
                 l1.update()
+                l1.obstacles.draw(screen)
+                l1.obstacles.update()
                 enemy.draw()
                 #Draw player
                 player.update()
                 enemy.update()   
                 #window update
                 moving_sprites.draw(screen)
-
+                
                 if player.isDead:
                     self.state = "gameover"
             
