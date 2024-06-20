@@ -1,5 +1,7 @@
 import pygame as pg
 
+from EnemyBullet import EnemyBullet
+
 import settings
 
 class Enemy(pg.sprite.Sprite):
@@ -20,14 +22,17 @@ class Enemy(pg.sprite.Sprite):
     def draw(self):
         settings.screen.blit(self.image, self.rect)
 
+    def attack(self):
+        current_tick = pg.time.get_ticks()
+        if current_tick - self.tick >= 1000:
+            self.tick = current_tick
+            settings.l1.bullets.add(
+                EnemyBullet(settings.path + "\\enemy\\bullet.png", self.rect.x+50, self.rect.y+52, 30, settings.player)    
+                )    
+
 
     def update(self):
-        
         if self.isDead:
             self.image = pg.image.load(settings.path + "\\enemy\\dead.png")
             self.image = pg.transform.scale_by(self.image, 8)
             self.rect.centery = self.y+140
-
-        
-    
-           

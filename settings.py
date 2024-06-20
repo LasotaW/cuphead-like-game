@@ -13,6 +13,10 @@ screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 path = os.path.join(os.getcwd(), 'images')
 music_path = os.path.join(os.getcwd(), 'sounds')
 
+pg.mixer.init()
+jump_sound = pg.mixer.Sound(music_path + "\\jump.ogg")
+hit_sound = pg.mixer.Sound(music_path + "\\hit.ogg")
+death_sound = pg.mixer.Sound(music_path + "\\death.ogg")
 
 player = Player(path + "\\player\\", 100, 500)
 l1 = Level(path, screen)

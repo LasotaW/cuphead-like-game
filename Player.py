@@ -23,6 +23,7 @@ class Player(pg.sprite.Sprite):
         self.image = self.animations[self.state][self.current_sprite]
         self.rect = self.image.get_rect()
         self.rect.center = self.x, self.y
+        self.isDead = False
 
         self.tick = pg.time.get_ticks()
         self.vel_y = 0
@@ -46,8 +47,7 @@ class Player(pg.sprite.Sprite):
 
     def jump(self):
         if not self.isJump:
-            jump_sound = pg.mixer.Sound(settings.music_path + "\\jump.ogg")
-            jump_sound.play()
+            settings.jump_sound.play()
             self.isJump = True
             self.vel_y = -20
 

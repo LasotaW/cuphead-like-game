@@ -11,7 +11,7 @@ class Bullet(pg.sprite.Sprite):
         self.vel_x = vel_x
         self.rect = self.image.get_rect()
         self.rect.center = self.x, self.y
-        self.damage = 20
+        self.damage = 5
 
     def update(self):
         key = pg.key.get_pressed()

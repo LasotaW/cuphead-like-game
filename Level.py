@@ -2,6 +2,8 @@ import pygame as pg
 
 import settings
 
+from EnemyBullet import EnemyBullet
+
 class Level:
     def __init__(self, path, surface):
         self.scroll = 0
@@ -39,15 +41,25 @@ class Level:
             settings.enemy.rect.centerx -= 12
 
         bullet_hit = pg.sprite.spritecollideany(settings.enemy, self.bullets)
-        if bullet_hit and not settings.enemy.isDead:
-            hit_sound = pg.mixer.Sound(settings.music_path + "\\hit.ogg")
-            hit_sound.play()
+        if bullet_hit and not isinstance(bullet_hit,EnemyBullet) and not settings.enemy.isDead:
+            settings.hit_sound.play()
             bullet_hit.kill()
             settings.enemy.isHit = True
             settings.enemy.health -= bullet_hit.damage
             if settings.enemy.health <= 0:
+                pg.mixer.quit()
+                pg.mixer.init()
+                settings.death_sound.play()
                 settings.enemy.isDead = True
-                death_sound = pg.mixer.Sound(settings.music_path + "\\death.ogg")
-                death_sound.play()
 
 
+        if settings.enemy.x - self.scroll * 2.5 <= 750 and not settings.enemy.isDead:
+            settings.enemy.attack()
+
+        enemy_bullet_hit = pg.sprite.spritecollideany(settings.player, self.bullets)
+        if enemy_bullet_hit and isinstance(enemy_bullet_hit, EnemyBullet):
+            enemy_bullet_hit.kill()
+            settings.player.health -= enemy_bullet_hit.damage
+            if settings.player.health <= 0:
+                settings.player.isDead = True
+                
