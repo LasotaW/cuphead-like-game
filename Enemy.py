@@ -26,6 +26,7 @@ class Enemy(pg.sprite.Sprite):
         current_tick = pg.time.get_ticks()
         if current_tick - self.tick >= 1000:
             self.tick = current_tick
+            settings.enemy_shot_sound.play()
             settings.l1.bullets.add(
                 EnemyBullet(settings.path + "\\enemy\\bullet.png", self.rect.x+50, self.rect.y+52, 30, settings.player)    
                 )    

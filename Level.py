@@ -19,7 +19,7 @@ class Level:
         for i in range(1, 10):
             rand_obstacle = random.randint(1,5)
             o = Obstacle(path + f"\\obstacle\\{rand_obstacle}.png",i * 1.5 *(random.randint(500,800)))
-            if not 2500 > o.rect.x > 4000:
+            if not 1000 > o.rect.x > 1500:
                 self.obstacles.add(o)
 
     def draw_bg(self):
@@ -68,6 +68,7 @@ class Level:
 
         enemy_bullet_hit = pg.sprite.spritecollideany(settings.player, self.bullets)
         if enemy_bullet_hit and isinstance(enemy_bullet_hit, EnemyBullet):
+            settings.damage_sound.play()
             enemy_bullet_hit.kill()
             settings.player.health -= enemy_bullet_hit.damage
             if settings.player.health <= 0:

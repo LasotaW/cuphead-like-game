@@ -37,13 +37,13 @@ class Player(pg.sprite.Sprite):
         return images
 
     def shoot(self, fire_rate):
-        shot_sound = pg.mixer.Sound(settings.music_path + "\\shot.ogg")
+       
         current_tick = pg.time.get_ticks()
         if current_tick - self.tick >= fire_rate:
             self.tick = current_tick
             b = Bullet(settings.path + "\\bullet.png", self.rect.x+105, self.rect.y+105, 20)
             settings.l1.bullets.add(b)
-            shot_sound.play()
+            settings.shot_sound.play()
 
     def jump(self):
         if not self.isJump:

@@ -18,6 +18,6 @@ class Obstacle(pg.sprite.Sprite):
     def update(self):
         key = pg.key.get_pressed()
         if key[pg.K_LEFT]:
-            self.rect.x += 20
+            self.rect.x += 12
         if key[pg.K_RIGHT]:
-           self.rect.x -= 20
+           self.rect.x -= 12
